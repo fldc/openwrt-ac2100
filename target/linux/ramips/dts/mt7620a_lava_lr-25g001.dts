@@ -41,11 +41,13 @@
 		wifi2g {
 			label = "green:wifi2g";
 			gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "phy1tpt";
 		};
 
 		wifi5g {
 			label = "green:wifi5g";
 			gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
+			linux,default-trigger = "phy0tpt";
 		};
 	};
 
@@ -123,6 +125,11 @@
 				0x04 0x87300000 /* PORT0 PAD MODE CTRL */
 				0x0c 0x00000000 /* PORT6 PAD MODE CTRL */
 				0x7c 0x0000007e /* PORT0_STATUS */
+				0x80 0x00001200 /* PORT1_STATUS */
+				0x84 0x00001200 /* PORT2_STATUS */
+				0x88 0x00001200 /* PORT3_STATUS */
+				0x8c 0x00001200 /* PORT4_STATUS */
+				0x90 0x00001200 /* PORT5_STATUS */
 				0x94 0x00000000 /* PORT6_STATUS */
 			>;
 		};

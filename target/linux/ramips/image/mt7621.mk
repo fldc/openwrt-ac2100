@@ -9,19 +9,6 @@ DEFAULT_SOC := mt7621
 KERNEL_DTB += -d21
 DEVICE_VARS += ELECOM_HWNAME LINKSYS_HWNAME
 
-define Build/elecom-wrc-gs-factory
-	$(eval product=$(word 1,$(1)))
-	$(eval version=$(word 2,$(1)))
-	$(eval hash_opt=$(word 3,$(1)))
-	$(MKHASH) md5 $(hash_opt) $@ >> $@
-	( \
-		echo -n "ELECOM $(product) v$(version)" | \
-			dd bs=32 count=1 conv=sync; \
-		dd if=$@; \
-	) > $@.new
-	mv $@.new $@
-endef
-
 define Build/gemtek-trailer
 	printf "%s%08X" ".GEMTEK." "$$(cksum $@ | cut -d ' ' -f1)" >> $@
 endef
@@ -623,6 +610,16 @@ define Device/gnubee_gb-pc2
 endef
 TARGET_DEVICES += gnubee_gb-pc2
 
+define Device/hilink_hlk-7621a-evb
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  DEVICE_VENDOR := HiLink
+  DEVICE_MODEL := HLK-7621A evaluation board
+  DEVICE_PACKAGES += kmod-mt76x2 kmod-usb3
+  IMAGE_SIZE := 32448k
+endef
+TARGET_DEVICES += hilink_hlk-7621a-evb
+
 define Device/hiwifi_hc5962
   $(Device/dsa-migration)
   BLOCKSIZE := 128k
@@ -738,6 +735,17 @@ define Device/iodata_wnpr2600g
   DEVICE_PACKAGES := kmod-mt7615e kmod-mt7615-firmware
 endef
 TARGET_DEVICES += iodata_wnpr2600g
+
+define Device/iptime_a3004ns-dual
+  $(Device/dsa-migration)
+  $(Device/uimage-lzma-loader)
+  IMAGE_SIZE := 16128k
+  UIMAGE_NAME := a3004nd
+  DEVICE_VENDOR := ipTIME
+  DEVICE_MODEL := A3004NS-dual
+  DEVICE_PACKAGES := kmod-usb3 kmod-mt76x2 kmod-usb-ledtrig-usbport
+endef
+TARGET_DEVICES += iptime_a3004ns-dual
 
 define Device/iptime_a6ns-m
   $(Device/dsa-migration)
